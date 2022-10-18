@@ -5,12 +5,19 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"time"
+    "path/filepath"
 )
 
 func main() {
-	var filename string = os.Args[1]
+    var filename string
+    if len(os.Args) == 1 {
+        fmt.Println("Inferred filename", filepath.Base(os.Args[0]))
+        curFile := filepath.Base(os.Args[0])
+        filename = fmt.Sprintf("../inputs/%s.txt", curFile)
+    } else {
+        filename = os.Args[1]
+    }
 	t0 := time.Now()
 	fmt.Printf("Reading from %s,", filename)
 	file, err := os.Open(filename)
@@ -19,14 +26,10 @@ func main() {
 	}
 	defer file.Close()
 
-	var depths []int
+	var line string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		if d, err := strconv.Atoi(scanner.Text()); err != nil {
-			log.Fatal(err)
-		} else {
-			depths = append(depths, d)
-		}
+        line = scanner.Text()
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -35,24 +38,29 @@ func main() {
 
 	fmt.Printf(" took %v\n", time.Since(t0))
 	t1 := time.Now()
-	increases := 0
-	for i := 1; i < len(depths); i++ {
-		if depths[i] > depths[i-1] {
-			increases++
-		}
-	}
-	fmt.Printf("1: %v, %v\n", increases, time.Since(t1))
+	floor := 0
+    for _, c := range line {
+        switch c {
+        case '(': floor += 1
+        case ')': floor -= 1
+        default: log.Fatal(c)
+        }
+    }
+	fmt.Printf("1: %v, %v\n", floor, time.Since(t1))
 
 	t2 := time.Now()
-	increases = 0
-	cur := depths[0] + depths[1] + depths[2]
-	prev := cur
-	for i := 3; i < len(depths); i++ {
-		cur += depths[i] - depths[i-3] 
-		if cur > prev {
-			increases++
-		}
-		prev = cur
-	}
-	fmt.Printf("2: %v, %v\n", increases, time.Since(t2))
+    floor = 0
+    pos := -1
+    for i, c := range line {
+        switch c {
+        case '(': floor += 1
+        case ')': floor -= 1
+        default: log.Fatal(c)
+        }
+        if floor < 0 {
+            pos = i
+            break
+        }
+    }
+	fmt.Printf("2: %v, %v\n", pos+1, time.Since(t2))
 }
