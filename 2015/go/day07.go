@@ -115,10 +115,13 @@ func (graph *Graph) eval() {
 				// we can process x
 				q = append(q, x)
 				delete(graph.indegree, x)
-
 				graph.values[x] = graph.instr[x].eval(graph.values)
 			}
 		}
+	}
+
+	if len(graph.indegree) > 0 {
+		log.Fatal(graph.indegree)
 	}
 }
 
