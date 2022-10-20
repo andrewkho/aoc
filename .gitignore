@@ -130,6 +130,7 @@ dmypy.json
 .idea
 inputs
 
+*.swp
 
 # private cookie for getting inputs
 .session
