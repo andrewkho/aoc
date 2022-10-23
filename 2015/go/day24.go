@@ -74,13 +74,13 @@ func main() {
 	N := len(weights)
 	bst := 1<<63 - 1
 	bstCount := 1<<63 - 1
-	var dfs func(i int, qe int, count int, remaining int, g1 int, weights []int, seen []bool, nGroups int)
-	dfs = func(i int, qe int, count int, remaining int, g1 int, weights []int, seen []bool, nGroups int) {
-		if count > bstCount {
+	var dfs func(i int, qe int, count int, remaining int, g1 int, weights []int, seen []bool, nGroups int, target int)
+	dfs = func(i int, qe int, count int, remaining int, g1 int, weights []int, seen []bool, nGroups int, target int) {
+		if count > bstCount || g1 > target {
 			return
 		}
 		// Check terminal condition
-		if remaining%nGroups == 0 && remaining/nGroups == g1 && canSplit(N-1, make([]int, nGroups), weights, seen, remaining/nGroups) {
+		if g1 == target && canSplit(N-1, make([]int, nGroups), weights, seen, target) {
 			if count < bstCount || (count == bstCount && qe < bst) {
 				bst = qe
 				bstCount = count
@@ -92,22 +92,21 @@ func main() {
 		}
 
 		// Try with and witout weight[i]
-		dfs(i-1, qe, count, remaining, g1, weights, seen, nGroups)
-
+		dfs(i-1, qe, count, remaining, g1, weights, seen, nGroups, target)
 		seen[i] = true
-		dfs(i-1, qe*weights[i], count+1, remaining-weights[i], g1+weights[i], weights, seen, nGroups)
+		dfs(i-1, qe*weights[i], count+1, remaining-weights[i], g1+weights[i], weights, seen, nGroups, target)
 		seen[i] = false
 	}
 	remaining := 0
 	for _, val := range weights {
 		remaining += val
 	}
-	dfs(N-1, 1, 0, remaining, 0, weights, make([]bool, N), 2)
+	dfs(N-1, 1, 0, remaining, 0, weights, make([]bool, N), 2, remaining/3)
 	fmt.Printf("1: %v, %v, %v\n", bst, bstCount, time.Since(t1))
 
 	t2 := time.Now()
 	bst = 1<<63 - 1
 	bstCount = 1<<63 - 1
-	dfs(N-1, 1, 0, remaining, 0, weights, make([]bool, N), 3)
+	dfs(N-1, 1, 0, remaining, 0, weights, make([]bool, N), 3, remaining/4)
 	fmt.Printf("2: %v, %v, %v\n", bst, bstCount, time.Since(t2))
 }
