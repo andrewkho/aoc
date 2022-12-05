@@ -30,22 +30,22 @@ def main():
                 instrs.append((int(groups[0]), int(groups[1]), int(groups[2])))
         stacks = [stack[::-1][1:] for stack in stacks]
 
-    with Timer("part 1"):
+    with Timer("Part 1"):
         stacks_orig = [stack.copy() for stack in stacks]
 
         for n, src, dst in instrs:
             for _ in range(n):
                 stacks[dst].append(stacks[src].pop())
 
-        print("part 1:", ''.join(stack[-1] for stack in stacks[1:]) )
+        print(''.join(stack[-1] for stack in stacks[1:]) )
 
-    with Timer("part 2"):
+    with Timer("Part 2"):
         stacks = stacks_orig
         for n, src, dst in instrs:
             stacks[dst].extend(stacks[src][-n:])
-            stacks[src] = stacks[src][:len(stacks[src])-n]
+            stacks[src] = stacks[src][:-n]
 
-        print("part 2:", ''.join(stack[-1] for stack in stacks[1:]) )
+        print(''.join(stack[-1] for stack in stacks[1:]) )
 
 
 if __name__ == '__main__':

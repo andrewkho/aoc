@@ -1,11 +1,19 @@
+from typing import Optional
 import time
 
 
 class Timer:
-    def __init__(self, name: str):
-        self.name = name
+    def __init__(
+        self,
+        text_start: Optional[str] = None,
+        show_end_text: bool = False,
+    ):
+        self.text_start = text_start
+        self.show_end_text = show_end_text
 
     def __enter__(self):
+        if self.text_start:
+            print(self.text_start)
         self.start = time.time()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -17,4 +25,9 @@ class Timer:
             else:
                 break
 
-        print(f"{self.name} took {dt:.03f} {unit}")
+        if self.show_end_text and self.text_start:
+            prefix = self.text_start + " "
+        else:
+            prefix = ""
+            
+        print(f"{prefix}took {dt:.03f} {unit}")
