@@ -57,8 +57,8 @@ def main():
                 h = lines[j][i]
                 sh, sj = h, 0
                 while stack and h >= stack[-1][0]:
-                    totals[sj][i] *= j-sj
                     sh, sj = stack.pop()
+                    totals[sj][i] *= j-sj
                 totals[j][i] *= j-sj if sh == h else j-stack[-1][1] if stack else j
                 stack.append((h, j))
             
