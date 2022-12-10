@@ -9,27 +9,27 @@ def main():
     with Timer(f"Reading from {infile}..."):
         with open(infile, "r") as f:
             lines = [list(map(int, line.strip())) for line in f.readlines()]
-        H = len(lines)
-        W = len(lines[0])
+        H, W = len(lines), len(lines[0])
 
     with Timer("part 1"):
         seen = set()
-        def step(stack, i, j):
-            if not stack or lines[j][i] > stack[-1][0]:
-                stack.append((lines[j][i], j))
+        def step(h, i, j):
+            if h < 0 or lines[j][i] > h:
                 seen.add((j, i))
-            
+                return lines[j][i]
+            return h
+
         for i in range(W):
-            stack1, stack2 = [], []
+            h1, h2 = -1, -1
             for j in range(H):
-                step(stack1, i, j)
-                step(stack2, i, H-1-j)
+                h1 = step(h1, i, j)
+                h2 = step(h2, i, H-1-j)
 
         for j in range(H):
-            stack1, stack2 = [], []
+            h1, h2 = -1, -1
             for i in range(W):
-                step(stack1, i, j)
-                step(stack2, W-1-i, j)
+                h1 = step(h1, i, j) 
+                h2 = step(h2, W-1-i, j)
 
         print("part 1:", len(seen))
 
