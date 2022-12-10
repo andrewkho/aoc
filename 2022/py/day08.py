@@ -40,31 +40,31 @@ def main():
             stack = []
             for i in range(W):
                 h = lines[j][i]
-                prev = h, 0
+                sh, si = h, 0
                 while stack and h >= stack[-1][0]:
-                    totals[j][stack[-1][1]] *= i-stack[-1][1]
-                    prev = stack.pop()
-                totals[j][i] *= i-prev[1] if prev[0] == h else i-stack[-1][1] if stack else i
+                    sh, si = stack.pop()
+                    totals[j][si] *= i-si
+                totals[j][i] *= i-si if sh == h else i-stack[-1][1] if stack else i
                 stack.append((h, i))
             
             while stack:
-                totals[j][stack[-1][1]] *= W-1 - stack[-1][1]
-                stack.pop()
+                sh, si = stack.pop()
+                totals[j][si] *= W-1 - si
         
         for i in range(W):
             stack = []
             for j in range(H):
                 h = lines[j][i]
-                prev = h, 0
+                sh, sj = h, 0
                 while stack and h >= stack[-1][0]:
-                    totals[stack[-1][1]][i] *= j-stack[-1][1]
-                    prev = stack.pop()
-                totals[j][i] *= j-prev[1] if prev[0] == h else j-stack[-1][1] if stack else j
+                    totals[sj][i] *= j-sj
+                    sh, sj = stack.pop()
+                totals[j][i] *= j-sj if sh == h else j-stack[-1][1] if stack else j
                 stack.append((h, j))
             
             while stack:
-                totals[stack[-1][1]][i] *= H-1 - stack[-1][1]
-                stack.pop()
+                sh, sj = stack.pop()
+                totals[sj][i] *= H-1 - sj
 
         best = max(max(x for x in line) for line in totals)
         print("part 2:", best)
