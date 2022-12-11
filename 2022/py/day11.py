@@ -15,6 +15,7 @@ class Monkey:
     t: int
     f: int
 
+
 def main():
     infile = "../inputs/" + __file__.replace(".py", ".txt")
 
@@ -69,14 +70,13 @@ def main():
     
     with Timer("part 1"):
         inspects = play(monkeys, 20, 3)
-        inspects = sorted(inspects)
-        print("part 1:", inspects[-1]*inspects[-2])
+        inspects = sorted(inspects, reverse=True)
+        print("part 1:", inspects[0]*inspects[1])
 
     with Timer("part 2"):
         inspects = play(monkeys2, 10000, 1)
-        inspects = sorted(inspects)
-        print("part 2:", inspects[-1]*inspects[-2])
-
+        inspects = sorted(inspects, reverse=True)
+        print("part 2:", inspects[0]*inspects[1])
 
 
 if __name__ == '__main__':
