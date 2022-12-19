@@ -33,8 +33,6 @@ def main():
     print(recipes)
 
     with Timer("part 1"):
-        bestest = 0
-
         @functools.lru_cache(maxsize=None)
         def dfs(minutes, ridx, bots, counts):
             nonlocal bestest
@@ -51,6 +49,9 @@ def main():
             best = 0
             new_bots = list(bots)
             for i in range(3, -1, -1):
+                if i<3 and bots[i] >= max(cost[i] for cost in recipes[ridx]):
+                    # Don't make more bots than you need to make any other bot
+                    continue
                 cost = recipes[ridx][i]
                 if all(counts[j] >= c for j, c in enumerate(cost)):
                     for j, c in enumerate(cost):
