@@ -73,15 +73,10 @@ def main():
             while len(dq) > 0:
                 x, y, t = dq.popleft()
                 grid = get_grid(t)
-                
                 if (x, y) == end:
-                    best = min(t, best)
-                    continue
-                elif t + (abs(end[0]-x) + abs(end[1]-y)) >= best:
-                    continue
+                    return t
                 elif grid[y][x] == 1:
                     continue
-
                 for dx, dy in [[1, 0], [-1, 0], [0, 1], [0, -1], [0, 0]]:
                     if not (0 <= x+dx < W and 0 <= y+dy < H):
                         continue
