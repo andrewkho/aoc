@@ -1,0 +1,8 @@
+name: aoc2023
+channels:
+  - conda-forge
+dependencies:
+  - python==3.12
+  - ipython
+  - requests
+
