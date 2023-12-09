@@ -28,8 +28,22 @@ def main():
         for line in lines:
             vals = [int(x) for x in line.split(" ")]
             result += get_next(vals)
+        print("part 1:", result)
 
-        print("part1:", result)
+    with Timer("part 1 (constant memory)"):
+        result = 0
+        for line in lines:
+            vals = [int(x) for x in line.split(" ")]
+            for i in range(len(vals)-1, -1, -1):
+                done = True
+                result += vals[i]
+                for j in range(i):
+                    vals[j] = vals[j+1]-vals[j]
+                    if vals[j] != 0:
+                        done = False
+                if done:
+                    break
+        print("part 1:", result)
 
     with Timer("part 2"):
         def get_next(vals):
@@ -42,6 +56,25 @@ def main():
         for line in lines:
             vals = [int(x) for x in line.split(" ")]
             result += get_next(vals)
+        print("part 2:", result)
+
+    with Timer("part 2 (constant memory)"):
+        result = 0
+        for line in lines:
+            vals = [int(x) for x in line.split(" ")]
+            for i in range(len(vals)):
+                done = True
+                for j in range(len(vals)-1, i, -1):
+                    vals[j] -= vals[j-1]
+                    if vals[j] != 0:
+                        done = False
+                if done:
+                    break
+            while i >= 0:
+                vals[i] -= vals[i+1]
+                i -= 1
+            
+            result += vals[0]
 
         print("part 2:", result)
 
