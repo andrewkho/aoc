@@ -15,6 +15,8 @@ class Grid:
     
     def neighbours(self, x, y):
         for dx, dy in itertools.product([-1, 0, 1], [-1, 0, 1]):
+            if (dx, dy) == (0, 0):
+                continue
             if not self.X0 <= x+dx < self.X:
                 continue
             if not self.Y0 <= y+dy < self.Y:
