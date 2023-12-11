@@ -31,40 +31,27 @@ def main():
             empty_rows[j] = False
             empty_cols[i] = False
 
-        total = 0
-        for i, (sj, si) in enumerate(galaxies):
-            for dj, di in galaxies[i+1:]:
-                for j in range(min(sj, dj), max(sj, dj)):
-                    if empty_rows[j]:
-                        total += 2
-                    else:
-                        total += 1
+        def f(expansion):
+            total = 0
+            for i, (sj, si) in enumerate(galaxies):
+                for dj, di in galaxies[i+1:]:
+                    for j in range(min(sj, dj), max(sj, dj)):
+                        if empty_rows[j]:
+                            total += expansion
+                        else:
+                            total += 1
 
-                for i in range(min(si, di), max(si, di)):
-                    if empty_cols[i]:
-                        total += 2
-                    else:
-                        total += 1
+                    for i in range(min(si, di), max(si, di)):
+                        if empty_cols[i]:
+                            total += expansion
+                        else:
+                            total += 1
+            return total
 
-        print("part1:", total)
+        print("part1:", f(2))
 
     with Timer("part 2"):
-        total = 0
-        for i, (sj, si) in enumerate(galaxies):
-            for dj, di in galaxies[i+1:]:
-                for j in range(min(sj, dj), max(sj, dj)):
-                    if empty_rows[j]:
-                        total += 1_000_000
-                    else:
-                        total += 1
-
-                for i in range(min(si, di), max(si, di)):
-                    if empty_cols[i]:
-                        total += 1_000_000
-                    else:
-                        total += 1
-
-        print("part 2:", total)
+        print("part 2:", f(1_000_000))
 
 
 if __name__ == '__main__':
