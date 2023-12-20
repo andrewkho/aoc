@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List
+from collections import defaultdict
 
 
 def get_input(f: str) -> str:
@@ -25,11 +26,22 @@ class Grid:
 
 
 def get_primes(up_to: int) -> List[int]:
-    sieve = [True] * (up_to // 2)
+    sieve = [True] * (up_to+1)
     sieve[0:2] = [False, False]
-    for c in range(2, len(sieve)//2):
+    for c in range(2, len(sieve)):
         for i in range(2*c, len(sieve), c):
             sieve[i] = False
     return [i for i, prime in enumerate(sieve) if prime]
 
+
+def prime_factors(x, primes):
+    if not primes:
+        primes = get_primes(x)
+    fac = defaultdict(int)
+    while x > 1:
+        for c in primes:
+            while x % c == 0:
+                x //= c
+                fac[c] += 1
+    return fac
 
