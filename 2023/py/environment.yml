@@ -6,4 +6,5 @@ dependencies:
   - ipython
   - requests
   - scipy
+  - numpy
 
